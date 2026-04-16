@@ -5,26 +5,24 @@ export default function HeroSection() {
     <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
       {/* Left Card */}
       <div className="bg-[#F3F4F3] rounded-[32px] p-5 md:p-8 flex flex-col justify-between relative overflow-hidden min-h-[500px]">
-        {/* <div> */}
-          <h1 className="text-3xl md:text-5xl lg:text-[62px] leading-[1.05] font-medium text-center md:text-start tracking-tight text-[#1A1A1A] mb-10">
-            Elevate Your Space with Elegant Simplicity Furniture Design
-          </h1>
+        <h1 className="text-3xl md:text-5xl lg:text-[62px] leading-[1.05] font-medium text-center md:text-start tracking-tight text-[#1A1A1A] mb-10">
+          Elevate Your Space with Elegant Simplicity Furniture Design
+        </h1>
 
-          <div className="flex justify-center md:justify-start flex-wrap gap-3 mb-12">
-            <span className="px-6 py-2.5 rounded-full border border-neutral-300 text-xs font-semibold text-neutral-800 bg-white shadow-sm">
-              Popular
-            </span>
-            <span className="px-6 py-2.5 rounded-full border border-neutral-300 text-xs font-semibold text-neutral-500 bg-transparent hover:bg-neutral-200/50 cursor-pointer transition-colors">
-              Exclusive
-            </span>
-            <span className="px-6 py-2.5 rounded-full border border-neutral-300 text-xs font-semibold text-neutral-500 bg-transparent hover:bg-neutral-200/50 cursor-pointer transition-colors">
-              Hot Price
-            </span>
-            <span className="px-6 py-2.5 rounded-full border border-neutral-300 text-xs font-semibold text-neutral-500 bg-transparent hover:bg-neutral-200/50 cursor-pointer transition-colors">
-              Limited Edition
-            </span>
-          </div>
-        {/* </div> */}
+        <div className="flex justify-center md:justify-start flex-wrap gap-3 mb-12">
+          <span className="px-6 py-2.5 rounded-full border border-neutral-300 text-xs font-semibold text-neutral-800 bg-white shadow-sm">
+            Popular
+          </span>
+          <span className="px-6 py-2.5 rounded-full border border-neutral-300 text-xs font-semibold text-neutral-500 bg-transparent hover:bg-neutral-200/50 cursor-pointer transition-colors">
+            Exclusive
+          </span>
+          <span className="px-6 py-2.5 rounded-full border border-neutral-300 text-xs font-semibold text-neutral-500 bg-transparent hover:bg-neutral-200/50 cursor-pointer transition-colors">
+            Hot Price
+          </span>
+          <span className="px-6 py-2.5 rounded-full border border-neutral-300 text-xs font-semibold text-neutral-500 bg-transparent hover:bg-neutral-200/50 cursor-pointer transition-colors">
+            Limited Edition
+          </span>
+        </div>
 
         {/* Floating Product Card */}
         <div className="bg-white rounded-[24px] p-4 flex items-center space-x-5 shadow-sm w-full md:h-52 relative z-10">

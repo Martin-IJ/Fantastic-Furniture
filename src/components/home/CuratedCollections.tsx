@@ -1,4 +1,13 @@
 import Image from "next/image";
+import FilterTabs from "../ui/FilterTabs";
+
+const COLLECTION_CATEGORIES = [
+  "All Collection",
+  "Cozy Corner Armchairs",
+  "Soft-Neutral Sofas",
+  "Coffee Tables",
+  "Minimalist Study Table"
+];
 
 export default function CuratedCollections() {
   return (
@@ -14,17 +23,8 @@ export default function CuratedCollections() {
         </div>
       </div>
 
-      {/* Filter Pills */}
-      <div className="flex overflow-x-auto pb-6 mb-8 space-x-3 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        <button className="flex-shrink-0 px-6 py-2.5 rounded-full border border-neutral-900 bg-white text-[13px] font-semibold text-neutral-900">All Collection</button>
-        <button className="flex-shrink-0 px-6 py-2.5 rounded-full border border-neutral-200 text-[13px] font-medium text-neutral-500 hover:border-neutral-300 transition-colors">Cozy Corner Armchairs</button>
-        <button className="flex-shrink-0 px-6 py-2.5 rounded-full border border-neutral-200 text-[13px] font-medium text-neutral-500 hover:border-neutral-300 transition-colors">Soft-Neutral Sofas</button>
-        <button className="flex-shrink-0 px-6 py-2.5 rounded-full border border-neutral-200 text-[13px] font-medium text-neutral-500 hover:border-neutral-300 transition-colors">Coffee Tables</button>
-        <button className="flex-shrink-0 px-6 py-2.5 rounded-full border border-neutral-200 text-[13px] font-medium text-neutral-500 hover:border-neutral-300 transition-colors">Minimalist Study Table</button>
-        <button className="flex-shrink-0 w-11 h-11 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-500 hover:bg-neutral-50 ml-auto transition-colors">
-           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-        </button>
-      </div>
+      {/* Filter Tabs */}
+      <FilterTabs tabs={COLLECTION_CATEGORIES} />
 
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
