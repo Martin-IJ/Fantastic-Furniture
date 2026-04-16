@@ -1,6 +1,17 @@
+"use client";
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
+  const pathname = usePathname();
+
+  const navLinks = [
+    { name: "Home", href: "/" },
+    { name: "Products", href: "/products" },
+    { name: "About Us", href: "/about" },
+    { name: "Contact", href: "/contact" }
+  ];
+
   return (
     <header className="w-full pt-6 pb-2 px-6 md:px-12 max-w-[1600px] mx-auto">
       <nav className="flex items-center justify-between">
@@ -13,18 +24,22 @@ export default function Navbar() {
 
         {/* Center Nav Pill */}
         <div className="hidden md:flex items-center bg-[#F3F4F3] rounded-full p-1.5 space-x-1 border border-neutral-200/60 shadow-sm">
-          <Link href="/" className="px-6 py-2.5 bg-white text-sm font-semibold text-neutral-900 rounded-full shadow-sm border border-neutral-100">
-            Home
-          </Link>
-          <Link href="/products" className="px-6 py-2.5 text-sm font-medium text-neutral-500 hover:text-neutral-900 transition-colors rounded-full hover:bg-neutral-200/50">
-            Products
-          </Link>
-          <Link href="/about" className="px-6 py-2.5 text-sm font-medium text-neutral-500 hover:text-neutral-900 transition-colors rounded-full hover:bg-neutral-200/50">
-            About Us
-          </Link>
-          <Link href="/contact" className="px-6 py-2.5 text-sm font-medium text-neutral-500 hover:text-neutral-900 transition-colors rounded-full hover:bg-neutral-200/50">
-            Contact
-          </Link>
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`px-6 py-2.5 text-sm transition-all duration-300 rounded-full ${
+                  isActive
+                    ? "bg-white text-neutral-900 font-semibold shadow-sm border border-neutral-100"
+                    : "text-neutral-500 font-medium hover:text-neutral-900 hover:bg-neutral-200/50"
+                }`}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
         </div>
 
         {/* Right Icons */}
@@ -44,16 +59,6 @@ export default function Navbar() {
               2
             </span>
           </button>
-          <div className="flex items-center space-x-3 pl-2">
-            <div className="h-10 w-10 rounded-full bg-neutral-200 overflow-hidden border border-neutral-200">
-               {/* eslint-disable-next-line @next/next/no-img-element */}
-               <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&h=64" alt="User Avatar" className="h-full w-full object-cover" />
-            </div>
-            <div className="hidden lg:block text-left text-xs leading-tight">
-              <div className="text-neutral-500 font-medium">Hello,</div>
-              <div className="font-bold text-neutral-900">Alex Maxler</div>
-            </div>
-          </div>
         </div>
       </nav>
     </header>

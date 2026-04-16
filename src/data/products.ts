@@ -10,23 +10,38 @@ export interface Product {
   tags: string[];
   images: string[];
   description: string;
+  createdAt?: string;
 }
 
 const COLLECTION_NAME = "products";
 
 export async function getProducts(): Promise<Product[]> {
-  const snapshot = await getDocs(collection(db, COLLECTION_NAME));
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+  let firestoreProducts: Product[] = [];
+  try {
+    const snapshot = await getDocs(collection(db, COLLECTION_NAME));
+    firestoreProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+  } catch (err) {
+    console.error("Firestore fetch failed, falling back to mock only:", err);
+  }
+  
+  // Combine: Firestore first, then Mock
+  return [...firestoreProducts, ...mockProducts];
 }
 
 export async function getProductById(id: string): Promise<Product | null> {
-  const docRef = doc(db, COLLECTION_NAME, id);
-  const docSnap = await getDoc(docRef);
-  
-  if (docSnap.exists()) {
-    return { id: docSnap.id, ...docSnap.data() } as Product;
+  try {
+    const docRef = doc(db, COLLECTION_NAME, id);
+    const docSnap = await getDoc(docRef);
+    
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() } as Product;
+    }
+  } catch (err) {
+    console.error("Firestore getById failed:", err);
   }
-  return null;
+
+  // Fallback to mock data
+  return mockProducts.find(p => p.id === id) || null;
 }
 
 export async function getRelatedProducts(category: string, currentId: string): Promise<Product[]> {
@@ -69,7 +84,8 @@ export const mockProducts: Product[] = [
     category: "Storage",
     tags: ["New Arrival", "Exclusive"],
     images: ["/wooden_desk.png"],
-    description: "Experience high-end minimalist modern detailing with everyday design masters pieces. Perfect for storing away your daily essentials elegantly."
+    description: "Experience high-end minimalist modern detailing with everyday design masters pieces. Perfect for storing away your daily essentials elegantly.",
+    createdAt: "2024-01-01T10:00:00Z"
   },
   {
     id: "2",
@@ -79,7 +95,8 @@ export const mockProducts: Product[] = [
     category: "Sofas",
     tags: ["Popular", "Eco-friendly"],
     images: ["/images/IMG_3141.jpg", "/hero_green_chair.png"],
-    description: "Built with quality designed for longevity and styled to impress. Enjoy premium comfort that completely transforms your living space."
+    description: "Built with quality designed for longevity and styled to impress. Enjoy premium comfort that completely transforms your living space.",
+    createdAt: "2024-01-02T10:00:00Z"
   },
   {
     id: "3",
@@ -89,7 +106,8 @@ export const mockProducts: Product[] = [
     category: "Tables",
     tags: ["Minimalist", "Popular"],
     images: ["/wooden_desk.png"],
-    description: "Sleek and functional study table with clean lines, built to maximize your productivity while maintaining absolute aesthetic dominance."
+    description: "Sleek and functional study table with clean lines, built to maximize your productivity while maintaining absolute aesthetic dominance.",
+    createdAt: "2024-01-03T10:00:00Z"
   },
   {
     id: "4",
@@ -99,7 +117,8 @@ export const mockProducts: Product[] = [
     category: "Tables",
     tags: ["Premium", "Wood"],
     images: ["/images/sitting room chair.PNG", "/chair.png"],
-    description: "Beautifully smooth aesthetic oak table crafted for large dining rooms and gathering spots. Minimalist wood finish."
+    description: "Beautifully smooth aesthetic oak table crafted for large dining rooms and gathering spots. Minimalist wood finish.",
+    createdAt: "2024-01-04T10:00:00Z"
   },
   {
     id: "5",
@@ -109,7 +128,8 @@ export const mockProducts: Product[] = [
     category: "Sofas",
     tags: ["Hot Price", "Popular"],
     images: ["/hero_green_chair.png"],
-    description: "Infuse nature into your interior with our signature green velvet sofa. Extra plush with resilient internal springs."
+    description: "Infuse nature into your interior with our signature green velvet sofa. Extra plush with resilient internal springs.",
+    createdAt: "2024-01-05T10:00:00Z"
   },
   {
     id: "6",
@@ -119,7 +139,8 @@ export const mockProducts: Product[] = [
     category: "Chairs",
     tags: ["Limited Edition"],
     images: ["/chair.png"],
-    description: "A simple yet breathtaking minimal chair. Strong metallic frame with a supple fabric seat that perfectly hugs the body."
+    description: "A simple yet breathtaking minimal chair. Strong metallic frame with a supple fabric seat that perfectly hugs the body.",
+    createdAt: "2024-01-06T10:00:00Z"
   },
   {
     id: "7",
@@ -129,6 +150,7 @@ export const mockProducts: Product[] = [
     category: "Decor",
     tags: ["Exclusive"],
     images: ["/wooden_slats.png"],
-    description: "Acoustic wooden slatted panels perfect for living room backgrounds. Real wood veneer on recycled acoustic felt."
+    description: "Acoustic wooden slatted panels perfect for living room backgrounds. Real wood veneer on recycled acoustic felt.",
+    createdAt: "2024-01-07T10:00:00Z"
   }
 ];

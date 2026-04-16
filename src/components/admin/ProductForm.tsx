@@ -25,6 +25,7 @@ export default function ProductForm({ productId }: { productId?: string }) {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     if (productId) {
@@ -48,6 +49,28 @@ export default function ProductForm({ productId }: { productId?: string }) {
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
+      setImageFiles(prev => [...prev, ...files]);
+      
+      const newPreviews = files.map(file => URL.createObjectURL(file));
+      setPreviews(prev => [...prev, ...newPreviews]);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith("image/"));
       setImageFiles(prev => [...prev, ...files]);
       
       const newPreviews = files.map(file => URL.createObjectURL(file));
@@ -180,13 +203,21 @@ export default function ProductForm({ productId }: { productId?: string }) {
              
              {/* Built-in File Uploader */}
              <div className="flex items-center justify-center w-full mb-6">
-                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-neutral-300 rounded-2xl cursor-pointer bg-neutral-50 hover:bg-neutral-100 transition-colors">
+                <label 
+                   htmlFor="file-upload"
+                   onDragOver={handleDragOver}
+                   onDragLeave={handleDragLeave}
+                   onDrop={handleDrop}
+                   className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-2xl cursor-pointer transition-colors ${
+                     isDragging ? 'border-neutral-900 bg-neutral-100/80 scale-[1.02]' : 'border-neutral-300 bg-neutral-50 hover:bg-neutral-100'
+                   }`}
+                >
                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       <svg className="w-8 h-8 mb-3 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
                       <p className="mb-2 text-sm text-neutral-500 font-medium"><span className="font-bold">Click to upload</span> or drag and drop</p>
                       <p className="text-xs text-neutral-400">PNG, JPG or WebP (Multiple allowed)</p>
                    </div>
-                   <input type="file" className="hidden" multiple accept="image/*" onChange={handleFileSelect} disabled={loading} />
+                   <input id="file-upload" type="file" className="hidden" multiple accept="image/*" onChange={handleFileSelect} disabled={loading} />
                 </label>
              </div>
 

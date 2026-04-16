@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import FilterTabs from "@/components/ui/FilterTabs";
 import ProductGrid from "@/components/ui/ProductGrid";
 import ProductCard from "@/components/ui/ProductCard";
+import { ProductGridSkeleton } from "@/components/ui/Skeletons";
 import { getProducts, Product } from "@/data/products";
 
 const categories = ["All", "Sofas", "Chairs", "Tables", "Storage", "Decor"];
@@ -20,12 +21,12 @@ export default function ProductsPage() {
     async function load() {
       try {
         setLoading(true);
-        setError(null);
+        // getProducts now internally merges firestore and mock data
         const data = await getProducts();
         setProducts(data);
       } catch (err) {
-        console.error("Error fetching products:", err);
-        setError("Failed to load products. Please check your Firebase configuration.");
+        console.error("Critical error in load:", err);
+        // Even if the main fetch fails, getProducts is designed to fallback to mock
       } finally {
         setLoading(false);
       }
@@ -77,34 +78,34 @@ export default function ProductsPage() {
 
       {/* Dynamic Grid / States */}
       {loading ? (
-        <div className="py-32 flex flex-col items-center justify-center">
-          <div className="w-10 h-10 border-4 border-neutral-200 border-t-neutral-900 rounded-full animate-spin mb-4"></div>
-          <p className="text-neutral-500 font-medium animate-pulse">Loading collection...</p>
-        </div>
-      ) : error ? (
-        <div className="py-24 text-center bg-red-50/50 rounded-[32px] border border-red-100">
-           <h3 className="text-xl font-bold text-red-600 mb-2">Connection Error</h3>
-           <p className="text-sm text-red-500 font-medium max-w-md mx-auto">{error}</p>
-        </div>
+        <ProductGridSkeleton count={6} columns={3} />
       ) : filteredProducts.length > 0 ? (
         <ProductGrid columns={3}>
-          {filteredProducts.map((product) => (
-            <ProductCard 
+          {filteredProducts.map((product, i) => (
+            <div
               key={product.id}
-              id={product.id}
-              image={product.images && product.images.length > 0 ? product.images[0] : ""}
-              name={product.name}
-              price={product.price}
-              rating={product.rating}
-              className="aspect-[3/4]"
-              overlayStyle="bottom-5 inset-x-5" 
-            />
+              className="animate-fade-in-up"
+              style={{ animationDelay: `${i * 40}ms`, animationFillMode: "both" }}
+            >
+              <ProductCard 
+                id={product.id}
+                image={product.images?.[0] || ""}
+                name={product.name}
+                price={product.price}
+                rating={product.rating}
+                className="aspect-[3/4]"
+                overlayStyle="bottom-5 inset-x-5" 
+              />
+            </div>
           ))}
         </ProductGrid>
       ) : (
         <div className="py-32 flex flex-col items-center justify-center text-center bg-neutral-50 border border-neutral-100 rounded-[32px]">
+          <div className="w-14 h-14 rounded-full bg-neutral-100 flex items-center justify-center mb-4">
+            <svg className="w-6 h-6 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+          </div>
           <h3 className="text-xl font-bold text-neutral-900 mb-2">No products found</h3>
-          <p className="text-sm text-neutral-500 font-medium max-w-sm">We couldn&apos;t find any products matching your search criteria. Try adjusting your filters or search query.</p>
+          <p className="text-sm text-neutral-500 font-medium max-w-sm">Try adjusting your filters or search query.</p>
         </div>
       )}
     </div>

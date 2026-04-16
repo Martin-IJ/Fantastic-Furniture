@@ -13,27 +13,25 @@ export default function FilterTabs({ tabs, defaultTab, onTabChange, className = 
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
-    if (onTabChange) onTabChange(tab);
+    onTabChange?.(tab);
   };
 
   return (
-    <div className={`flex overflow-x-auto pb-6 mb-8 space-x-3 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${className}`}>
+    <div className={`flex overflow-x-auto pb-6 mb-8 space-x-2.5 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${className}`}>
       {tabs.map((tab) => (
         <button
           key={tab}
+          id={`filter-tab-${tab.toLowerCase().replace(/\s+/g, '-')}`}
           onClick={() => handleTabClick(tab)}
-          className={`flex-shrink-0 px-6 py-2.5 rounded-full border text-[13px] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 ${
+          className={`flex-shrink-0 px-6 py-2.5 rounded-full border text-[13px] transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 active:scale-95 ${
             activeTab === tab
-              ? "border-neutral-900 bg-white text-neutral-900 font-semibold shadow-sm"
-              : "border-neutral-200 bg-transparent text-neutral-500 font-medium hover:border-neutral-300 hover:text-neutral-700"
+              ? "border-neutral-900 bg-neutral-900 text-white font-semibold shadow-md shadow-neutral-900/10"
+              : "border-neutral-200 bg-white text-neutral-500 font-medium hover:border-neutral-400 hover:text-neutral-800 hover:shadow-sm"
           }`}
         >
           {tab}
         </button>
       ))}
-      <button className="flex-shrink-0 w-11 h-11 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-500 hover:bg-neutral-50 ml-auto transition-colors focus:outline-none">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-      </button>
     </div>
   );
 }

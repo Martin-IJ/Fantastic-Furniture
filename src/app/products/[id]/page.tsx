@@ -6,6 +6,8 @@ import ImageCarousel from "@/components/ui/ImageCarousel";
 import RatingStars from "@/components/ui/RatingStars";
 import ProductGrid from "@/components/ui/ProductGrid";
 import ProductCard from "@/components/ui/ProductCard";
+import OrderModal from "@/components/ui/OrderModal";
+import { ProductDetailSkeleton } from "@/components/ui/Skeletons";
 
 export default function ProductDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const unwrappedParams = use(params);
@@ -14,6 +16,7 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ id: s
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     async function loadData() {
@@ -43,14 +46,7 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ id: s
     loadData();
   }, [unwrappedParams.id]);
 
-  if (loading) {
-     return (
-        <div className="min-h-screen flex flex-col items-center justify-center">
-          <div className="w-10 h-10 border-4 border-neutral-200 border-t-neutral-900 rounded-full animate-spin mb-4"></div>
-          <p className="text-neutral-500 font-medium animate-pulse">Loading product details...</p>
-        </div>
-     );
-  }
+  if (loading) return <ProductDetailSkeleton />;
 
   if (error || !product) {
      return (
@@ -91,7 +87,7 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ id: s
 
           {/* Action Area */}
           <div className="mt-auto space-y-4 max-w-sm pt-8 border-t border-neutral-100">
-            <button className="w-full h-14 bg-neutral-900 text-white rounded-full font-bold text-[13px] hover:bg-neutral-800 transition-all flex items-center justify-center space-x-2 shadow-lg shadow-neutral-900/20 hover:shadow-xl hover:shadow-neutral-900/30">
+            <button onClick={() => setIsModalOpen(true)} className="w-full h-14 bg-neutral-900 text-white rounded-full font-bold text-[13px] hover:bg-neutral-800 transition-all flex items-center justify-center space-x-2 shadow-lg shadow-neutral-900/20 hover:shadow-xl hover:shadow-neutral-900/30">
               <span>Place Order</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m9 18 6-6-6-6"/></svg>
             </button>
@@ -121,6 +117,15 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ id: s
             ))}
           </ProductGrid>
         </section>
+      )}
+
+      {/* Order Modal Injection */}
+      {product && (
+        <OrderModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          product={product} 
+        />
       )}
     </div>
   );

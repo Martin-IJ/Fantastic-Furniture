@@ -18,7 +18,7 @@ export default function CTASection() {
       <div className="bg-[#F8F9F8] rounded-[32px] p-10 md:p-14 flex flex-col justify-between">
          <div className="text-center md:text-left mb-16 pt-6">
             <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-neutral-400 mb-6 block text-center">Expectation</span>
-            <h2 className="text-4xl md:text-[46px] font-medium tracking-tight text-neutral-900 max-w-2xl mx-auto leading-[1.1] mb-6 text-center">
+            <h2 className="text-3xl md:text-[46px] font-medium tracking-tight text-neutral-900 max-w-2xl mx-auto leading-[1.1] mb-6 text-center">
               We craft spaces where minimalist style meets everyday comfort and modern beauty.
             </h2>
             <p className="text-neutral-500 font-medium text-[15px] text-center max-w-sm mx-auto">
